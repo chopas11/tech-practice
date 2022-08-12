@@ -1,0 +1,41 @@
+
+version: '3'
+
+services:
+  web:
+    image: nginx
+    volumes:
+     - ./nginx_data:/usr/share/nginx/html
+     #- ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+     - "80:80"
+    environment:
+     - NGINX_HOST=example.com
+     - NGINX_PORT=80
+  # Service for DBMS MYSQL
+  mysql:
+    image: mysql
+    # Mysql port 3306
+    ports:
+      - '3306:3306'
+    #
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    environment:
+      # MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: sasha100
+      # MYSQL_DATABASE: mineral
+      MYSQL_USER: chopas
+      MYSQL_PASSWORD: SashaSasha100
+  # Service for Postgres
+  postgres:
+    image: postgres
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+     # Postgres port 5432
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres

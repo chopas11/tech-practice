@@ -2,6 +2,19 @@
 version: '3'
 
 services:
+  nodejs:
+    build: ./node_data/
+    restart: unless-stopped
+    command: npm install
+    command: npm run dev
+    volumes:
+      - ./node_data/:/usr/app/
+    ports:
+      - "8000:8000"
+    stdin_open: true
+    tty: true
+    #depends_on:
+    #  - postgres
   web:
     image: nginx
     volumes:
@@ -13,20 +26,21 @@ services:
      - NGINX_HOST=example.com
      - NGINX_PORT=80
   # Service for DBMS MYSQL
-  mysql:
-    image: mysql
-    # Mysql port 3306
-    ports:
-      - '3306:3306'
-    #
-    volumes:
-      - ./mysql_data:/var/lib/mysql
-    environment:
-      # MYSQL_ROOT_USER: root
-      MYSQL_ROOT_PASSWORD: sasha100
-      # MYSQL_DATABASE: mineral
-      MYSQL_USER: chopas
-      MYSQL_PASSWORD: SashaSasha100
+#  mysql:
+#    image: mysql
+#    # Mysql port 3306
+#    ports:
+#      - '3306:3306'
+#    #
+#    volumes:
+#      - ./mysql_data:/var/lib/mysql
+#    environment:
+#      # MYSQL_ROOT_USER: root
+#      MYSQL_ROOT_PASSWORD: sasha100
+#      # MYSQL_DATABASE: mineral
+#      MYSQL_USER: chopas
+#      MYSQL_PASSWORD: SashaSasha100
+
   # Service for Postgres
   postgres:
     image: postgres
