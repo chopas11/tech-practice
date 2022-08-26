@@ -1,54 +1,45 @@
-
 version: '3'
 
 services:
-  nodejs:
-    build: ./node_data/
-    restart: unless-stopped
-    command: npm install
-    command: npm run dev
+  # Service for NodeJS API
+  api:
+    build: ./api
+    # restart: unless-stopped
+    container_name: api_backend
+    # command: npm install
+    # command: npm run dev
     volumes:
-      - ./node_data/:/usr/app/
+      - ./api/:/app
+      - ./app/node_modules
     ports:
-      - "8000:8000"
+      - '4000:4000'
     stdin_open: true
     tty: true
-    #depends_on:
-    #  - postgres
-  web:
-    image: nginx
-    volumes:
-     - ./nginx_data:/usr/share/nginx/html
-     #- ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - postgres
+  # Service for React Client
+  client:
+    build: ./client
+    container_name: client_frontend
     ports:
-     - "80:80"
-    environment:
-     - NGINX_HOST=example.com
-     - NGINX_PORT=80
-  # Service for DBMS MYSQL
-#  mysql:
-#    image: mysql
-#    # Mysql port 3306
-#    ports:
-#      - '3306:3306'
-#    #
-#    volumes:
-#      - ./mysql_data:/var/lib/mysql
-#    environment:
-#      # MYSQL_ROOT_USER: root
-#      MYSQL_ROOT_PASSWORD: sasha100
-#      # MYSQL_DATABASE: mineral
-#      MYSQL_USER: chopas
-#      MYSQL_PASSWORD: SashaSasha100
+      - '3000:3000'
+    volumes:
+      - ./client:/app
+      - ./app/node_modules
+    stdin_open: true
+    tty: true
+    depends_on:
+      - postgres
 
-  # Service for Postgres
+  # Service for Postgres Database
   postgres:
     image: postgres
+    container_name: db_postgres
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
-     # Postgres port 5432
+      # Postgres port 5432
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres

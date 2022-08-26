@@ -1,0 +1,6 @@
+create TABLE coords (
+    f_id SERIAL PRIMARY KEY,
+    f_x REAL NOT NULL,
+    f_y REAL NOT NULL,
+    f_time TIMESTAMP NOT NULL DEFAULT LOCALTIMESTAMP
+);
